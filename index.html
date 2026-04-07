@@ -11,11 +11,15 @@
     <img class="logo" src="designs/logo3.jpg"/>
 
     <button id="openModalBtn" class="btn">Открыть модальное окно</button>
-
     <div class="modal" id="modal">
         <button class="close-btn" id="closeModalBtn">&times;</button>
         <div class="modal-content">
-            Спасибо, что нажал на меня :)
+            <div class="progress-container">
+                <div class="progress-bar" id="progressBar">
+                    <div class="progress-fill" id="progressFill"></div>
+                    <span class="progress-text" id="progressText">Loading...</span>
+                </div>
+            </div>
         </div>
     </div>
 
