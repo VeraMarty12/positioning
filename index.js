@@ -55,11 +55,16 @@ function animateProgress() {
         progress += step;
 
         if (progress >= 100) {
-            progress = 100;
+            bar.style.width = '100%';
+            textWhite.style.clipPath = 'inset(0 0% 0 0)';
+            
             clearInterval(currentInterval);
             currentInterval = null;
             
-            closeModal();
+            setTimeout(() => {
+                closeModal();
+            }, 50);
+            return;
         }
 
         bar.style.width = progress + '%';
