@@ -6,24 +6,33 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <!--Верстать тут-->
-    <img class="logo" src="designs/logo1.png"/>
-    <img class="logo" src="designs/logo3.jpg"/>
+    <div class="logos-container">
+        <div class="logo-item">
+            <div class="logo-mickey">
+                <div class="head"></div>
+                <div class="ear left"></div>
+                <div class="ear right"></div>
+            </div>
+        </div>
 
-    <button id="openModalBtn" class="btn">Открыть модальное окно</button>
-    <div class="modal" id="modal">
-        <button class="close-btn" id="closeModalBtn">&times;</button>
-        <div class="modal-content">
-            <div class="progress-container">
-                <div class="progress-bar" id="progressBar">
-                    <div class="progress-fill" id="progressFill"></div>
-                    <span class="progress-text" id="progressText">Loading...</span>
-                </div>
+        <div class="logo-item">
+            <div class="logo-circle"></div>
+        </div>
+    </div>
+
+    <button id="openModalBtn" class="lightbox-btn">Открыть модальное окно</button>
+
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal">
+            <button class="modal-close" id="modalCloseBtn">&times;</button>
+            <div class="progress">
+                <div class="bar" id="progressBar"></div>
+                <div class="text text-black">Loading...</div>
+                <div class="text text-white">Loading...</div>
             </div>
         </div>
     </div>
 
-    <div class="overlay" id="overlay"></div>
     <script src="index.js"></script>
 </body>
 </html>

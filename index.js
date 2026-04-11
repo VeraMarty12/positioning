@@ -1,74 +1,69 @@
-document.addEventListener('DOMContentLoaded', function () {
-  const modal = document.getElementById('modal');
-  const overlay = document.getElementById('overlay');
-  const openModalBtn = document.getElementById('openModalBtn');
-  const closeModalBtn = document.getElementById('closeModalBtn');
-  const progressFill = document.getElementById('progressFill');
-  const progressText = document.getElementById('progressText');
-  const progressBar = document.getElementById('progressBar');
+const openBtn = document.getElementById('openModalBtn');
+const overlay = document.getElementById('modalOverlay');
+const closeBtn = document.getElementById('modalCloseBtn');
+const bar = document.querySelector('.bar');
+const textWhite = document.querySelector('.text-white');
 
-  openModalBtn.addEventListener('click', function () {
-    modal.style.display = 'block';
-    overlay.style.display = 'block';
-    startProgressAnimation();
-  });
+let currentInterval = null; 
 
-  closeModalBtn.addEventListener('click', function () {
-    modal.style.display = 'none';
+function openModal() {
+    overlay.style.display = 'flex';
+
+    bar.style.width = '0%';
+    textWhite.style.clipPath = 'inset(0 100% 0 0)';
+
+    animateProgress();
+}
+
+function closeModal() {
     overlay.style.display = 'none';
-  });
-
-  function startProgressAnimation() {
-    let progress = 0;
-    progressFill.style.width = '0';
-    progressText.textContent = 'Loading...';
-    progressText.style.color = '#000';
-
-    const text = progressText.textContent;
-    progressText.textContent = '';
-
-    const letters = [];
-    for (let i = 0; i < text.length; i++) {
-      const span = document.createElement('span');
-      span.textContent = text[i];
-      span.style.position = 'relative';
-      span.style.zIndex = '2';
-      progressText.appendChild(span);
-      letters.push(span);
+    
+    if (currentInterval) {
+        clearInterval(currentInterval);
+        currentInterval = null;
     }
+}
+
+openBtn.addEventListener('click', openModal);
+closeBtn.addEventListener('click', closeModal);
+
+overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) {
+        closeModal();
+    }
+});
+
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && overlay.style.display === 'flex') {
+        closeModal();
+    }
+});
+
+function animateProgress() {
+    let progress = 0;
 
     const duration = 3000;
-    const startTime = performance.now();
+    const fps = 60;
+    const stepTime = 1000 / fps;
+    const step = 100 / (duration / stepTime);
 
-    function updateProgress(currentTime) {
-      const elapsedTime = currentTime - startTime;
-      progress = Math.min((elapsedTime / duration) * 100, 100);
-      progressFill.style.width = `${progress}%`;
-
-      const barRect = progressBar.getBoundingClientRect();
-      const fillWidth = barRect.width * (progress / 100);
-
-      letters.forEach((letter) => {
-        const letterRect = letter.getBoundingClientRect();
-        const letterLeft = letterRect.left - barRect.left;
-
-        if (letterLeft < fillWidth) {
-          letter.style.color = '#fff';
-        } else {
-          letter.style.color = '#000';
-        }
-      });
-
-      if (progress < 100) {
-        requestAnimationFrame(updateProgress);
-      } else {
-        setTimeout(() => {
-          modal.style.display = 'none';
-          overlay.style.display = 'none';
-        }, 500);
-      }
+    if (currentInterval) {
+        clearInterval(currentInterval);
     }
 
-    requestAnimationFrame(updateProgress);
-  }
-});
+    currentInterval = setInterval(() => {
+        progress += step;
+
+        if (progress >= 100) {
+            progress = 100;
+            clearInterval(currentInterval);
+            currentInterval = null;
+            
+            closeModal();
+        }
+
+        bar.style.width = progress + '%';
+        textWhite.style.clipPath = `inset(0 ${100 - progress}% 0 0)`;
+
+    }, stepTime);
+}
